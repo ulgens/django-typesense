@@ -1,5 +1,7 @@
 import logging
 
+from dateutil.parser import parse
+
 from django import forms
 from django.contrib import messages
 from django.contrib.admin.exceptions import DisallowedModelAdminToField
@@ -13,7 +15,6 @@ from django.core.exceptions import ImproperlyConfigured, SuspiciousOperation
 from django.core.paginator import InvalidPage
 from django.db.models import OrderBy, OuterRef, Exists
 from django.utils.translation import gettext
-from django.utils.dateparse import parse_datetime
 
 from django_typesense.fields import TYPESENSE_DATETIME_FIELDS
 from django_typesense.utils import get_unix_timestamp
@@ -285,7 +286,7 @@ class TypesenseChangeList(ChangeList):
                 continue
 
             if isinstance(field, tuple(TYPESENSE_DATETIME_FIELDS)):
-                datetime_object = parse_datetime(value)
+                datetime_object = parse(value)
                 value = get_unix_timestamp(datetime_object)
 
             if str(value).isdigit():
